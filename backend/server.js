@@ -25,6 +25,13 @@ const ExpenseSchema = new mongoose.Schema({
 
 const Expense = mongoose.model("Expense", ExpenseSchema);
 
+const SummarySchema = new mongoose.Schema({
+  key: { type: String, unique: true },
+  totalReceived: { type: Number, default: 0 }
+});
+
+const Summary = mongoose.model("Summary", SummarySchema);
+
 // routes
 app.post("/signup", async (req, res) => {
   const hashed = await bcrypt.hash(req.body.password, 10);
@@ -63,14 +70,25 @@ app.post("/expenses", async (req, res) => {
   res.json(expense);
 });
 
-let totalReceived = 0;
-app.get("/received", (req, res) => {
-  res.json({ totalReceived });
+app.get("/received", async (req, res) => {
+  const summary = await Summary.findOne({ key: "main" });
+  res.json({ totalReceived: summary?.totalReceived || 0 });
 });
 
-app.post("/received", (req, res) => {
-  totalReceived += req.body.amount;
-  res.json({ totalReceived });
+app.post("/received", async (req, res) => {
+  const amount = Number(req.body.amount);
+
+  if (Number.isNaN(amount)) {
+    return res.status(400).json({ error: "Invalid amount" });
+  }
+
+  const summary = await Summary.findOneAndUpdate(
+    { key: "main" },
+    { $inc: { totalReceived: amount }, $setOnInsert: { key: "main" } },
+    { new: true, upsert: true }
+  );
+
+  res.json({ totalReceived: summary.totalReceived });
 });
 
 app.delete("/expenses/:id", async (req, res) => {
