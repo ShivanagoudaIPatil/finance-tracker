@@ -66,50 +66,61 @@ export default function Expense({ expenses, setExpenses }) {
   }
 
   return (
-    <>
-      <h3>Add new Expense</h3>
+    <div className="expense-section">
+      <h3 className="section-title">Add New Expense</h3>
 
-      <input
-        placeholder="Expense name"
-        value={newTitle}
-        onChange={e => setNewTitle(e.target.value)}
-      />
+      <div className="expense-form">
+        <input
+          placeholder="Expense name"
+          value={newTitle}
+          onChange={e => setNewTitle(e.target.value)}
+        />
 
-      <input
-        placeholder="Amount"
-        type="number"
-        value={newAmount}
-        onChange={e => setNewAmount(e.target.value)}
-      />
+        <input
+          placeholder="Amount"
+          type="number"
+          value={newAmount}
+          onChange={e => setNewAmount(e.target.value)}
+        />
 
-      <button onClick={addNewExpense}>Add Expense</button>
+        <button onClick={addNewExpense}>Add Expense</button>
+      </div>
 
-      <ul>
+      <ul className="expense-list">
         {expenses.map(exp => (
-          <li key={exp._id}>
+          <li key={exp._id} className="expense-item">
             {editingId === exp._id ? (
               <>
-                <input
-                  value={editTitle}
-                  onChange={e => setEditTitle(e.target.value)}
-                />
-                <input
-                  type="number"
-                  value={editAmount}
-                  onChange={e => setEditAmount(e.target.value)}
-                />
-                <button onClick={() => saveEdit(exp._id)}>Save</button>
+                <div className="edit-fields">
+                  <input
+                    value={editTitle}
+                    onChange={e => setEditTitle(e.target.value)}
+                  />
+                  <input
+                    type="number"
+                    value={editAmount}
+                    onChange={e => setEditAmount(e.target.value)}
+                  />
+                </div>
+                <div className="item-actions">
+                  <button onClick={() => saveEdit(exp._id)}>Save</button>
+                </div>
               </>
             ) : (
               <>
-                {exp.title} — ₹{exp.amount}
-                <button onClick={() => startEdit(exp)}>Edit</button>
-                <button onClick={() => deleteExpense(exp._id)}>Delete</button>
+                <div className="item-main">
+                  <span className="item-title">{exp.title}</span>
+                  <span className="item-amount">₹{exp.amount}</span>
+                </div>
+                <div className="item-actions">
+                  <button onClick={() => startEdit(exp)}>Edit</button>
+                  <button className="danger" onClick={() => deleteExpense(exp._id)}>Delete</button>
+                </div>
               </>
             )}
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }

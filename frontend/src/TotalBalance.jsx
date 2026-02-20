@@ -9,5 +9,10 @@ export default function TotalBalance({
 
   const balance = totalRecived - totalSpent;
 
-  return <p>Total Balance: ₹{balance}</p>;
+  return (
+    <div className={`summary-card balance ${balance < 0 ? "negative" : "positive"}`}>
+      <span>Total Balance</span>
+      <strong>₹{balance}</strong>
+    </div>
+  );
 }

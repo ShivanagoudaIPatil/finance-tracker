@@ -13,20 +13,31 @@ function App() {
   const [totalRecived, setTotalRecived] = useState(0);
 
   return (
-  <div className="app">
-    <Expense expenses={expenses} setExpenses={setExpenses} />
+  <div className="app-shell">
+    <div className="app">
+      <header className="app-header">
+        <h1>Expense Tracker</h1>
+        <p>Track expenses, income, and your balance</p>
+      </header>
 
-    <TotalRecived
-      totalRecived={totalRecived}
-      setTotalRecived={setTotalRecived}
-    />
+      <section className="card">
+        <Expense expenses={expenses} setExpenses={setExpenses} />
+      </section>
 
-    <div className="totals">
-      <TotalSpent expenses={expenses} />
-      <TotalBalance
-        expenses={expenses}
-        totalRecived={totalRecived}
-      />
+      <section className="card">
+        <TotalRecived
+          totalRecived={totalRecived}
+          setTotalRecived={setTotalRecived}
+        />
+      </section>
+
+      <div className="summary-grid">
+        <TotalSpent expenses={expenses} />
+        <TotalBalance
+          expenses={expenses}
+          totalRecived={totalRecived}
+        />
+      </div>
     </div>
   </div>
 );

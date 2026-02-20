@@ -29,19 +29,23 @@ export default function TotalRecived({
   }
 
   return (
-    <>
-      <input
-        type="number"
-        placeholder="Enter Amount Received"
-        value={input}
-        onChange={e => setInput(e.target.value)}
-      />
+    <div className="income-section">
+      <h3 className="section-title">Amount Received</h3>
 
-      <button onClick={addAmount}>
-        Add Received Amount
-      </button>
+      <div className="income-form">
+        <input
+          type="number"
+          placeholder="Enter Amount Received"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+        />
 
-      <p>Total Recived: ₹{totalRecived}</p>
-    </>
+        <button onClick={addAmount}>
+          Add Received Amount
+        </button>
+      </div>
+
+      <p className="income-total">Total Received: ₹{totalRecived}</p>
+    </div>
   );
 }

@@ -4,5 +4,10 @@ export default function TotalSpent({ expenses }) {
     0
   );
 
-  return <p>Total Spent: ₹{total}</p>;
+  return (
+    <div className="summary-card spent">
+      <span>Total Spent</span>
+      <strong>₹{total}</strong>
+    </div>
+  );
 }
