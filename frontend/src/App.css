@@ -12,6 +12,10 @@
   gap: 16px;
 }
 
+.auth-app {
+  max-width: 460px;
+}
+
 .app-header {
   text-align: center;
 }
@@ -75,6 +79,29 @@ button {
 button:hover {
   background: #1d4ed8;
   transform: translateY(-1px);
+}
+
+button.secondary {
+  background: #475569;
+}
+
+button.secondary:hover {
+  background: #334155;
+}
+
+.auth-card {
+  padding: 22px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 10px;
+}
+
+.auth-message {
+  margin: 4px 0 0;
+  color: #334155;
+  font-size: 0.95rem;
 }
 
 .expense-form,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function Expense({ expenses, setExpenses }) {
+export default function Expense({ token, onUnauthorized, expenses, setExpenses }) {
 
   const [newTitle, setNewTitle] = useState("");
   const [newAmount, setNewAmount] = useState("");
@@ -11,10 +11,23 @@ export default function Expense({ expenses, setExpenses }) {
 
   // load expenses from backend
   useEffect(() => {
-    fetch("http://localhost:5000/expenses")
-      .then(res => res.json())
-      .then(data => setExpenses(data));
-  }, []);
+    fetch("http://localhost:5000/expenses", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (res.status === 401) {
+          onUnauthorized();
+          return [];
+        }
+
+        return Array.isArray(data) ? data : [];
+      })
+      .then((data) => setExpenses(data));
+  }, [token, onUnauthorized, setExpenses]);
 
   // add expense to backend
   async function addNewExpense() {
@@ -27,11 +40,20 @@ export default function Expense({ expenses, setExpenses }) {
 
     const res = await fetch("http://localhost:5000/expenses", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify(expense)
     });
 
+    if (res.status === 401) {
+      onUnauthorized();
+      return;
+    }
+
     const saved = await res.json();
+    if (!res.ok) return;
     setExpenses(prev => [...prev, saved]);
 
     setNewTitle("");
@@ -40,9 +62,19 @@ export default function Expense({ expenses, setExpenses }) {
 
   // delete from backend
   async function deleteExpense(id) {
-    await fetch(`http://localhost:5000/expenses/${id}`, {
-      method: "DELETE"
+    const res = await fetch(`http://localhost:5000/expenses/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
+
+    if (res.status === 401) {
+      onUnauthorized();
+      return;
+    }
+
+    if (!res.ok) return;
 
     setExpenses(prev => prev.filter(exp => exp._id !== id));
   }

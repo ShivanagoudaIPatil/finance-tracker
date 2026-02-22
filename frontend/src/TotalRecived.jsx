@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
 export default function TotalRecived({
+  token,
+  onUnauthorized,
   totalRecived,
   setTotalRecived
 }) {
@@ -8,10 +10,23 @@ export default function TotalRecived({
 
   // load received amount from backend on refresh
   useEffect(() => {
-    fetch("http://localhost:5000/received")
-      .then(res => res.json())
-      .then(data => setTotalRecived(data.totalReceived));
-  }, []);
+    fetch("http://localhost:5000/received", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (res.status === 401) {
+          onUnauthorized();
+          return { totalReceived: 0 };
+        }
+
+        return data;
+      })
+      .then((data) => setTotalRecived(data.totalReceived || 0));
+  }, [token, onUnauthorized, setTotalRecived]);
 
   // save to backend
   async function addAmount() {
@@ -19,11 +34,20 @@ export default function TotalRecived({
 
     const res = await fetch("http://localhost:5000/received", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify({ amount: Number(input) })
     });
 
+    if (res.status === 401) {
+      onUnauthorized();
+      return;
+    }
+
     const data = await res.json();
+    if (!res.ok) return;
     setTotalRecived(data.totalReceived);
     setInput("");
   }
