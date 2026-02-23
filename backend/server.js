@@ -1,10 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const User = require("./models/User");
+const app = express();
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("./models/User");
-const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || "SECRET_KEY";
 
 app.use(cors());
