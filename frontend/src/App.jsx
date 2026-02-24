@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Expense from "./Expense";
+import DigitalClock from "./DigitalClock";
 import TotalBalance from "./TotalBalance";
 import TotalRecived from "./TotalRecived";
 import TotalSpent from "./TotalSpent";
@@ -52,6 +53,12 @@ function App() {
     setPassword("");
   }
 
+  function handleAuthKeyDown(event) {
+    if (event.key === "Enter") {
+      handleAuthSubmit();
+    }
+  }
+
   function logout() {
     localStorage.removeItem("token");
     setToken("");
@@ -75,6 +82,7 @@ function App() {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={handleAuthKeyDown}
               />
 
               <input
@@ -82,6 +90,7 @@ function App() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleAuthKeyDown}
               />
 
               <button onClick={handleAuthSubmit}>
@@ -112,6 +121,7 @@ function App() {
       <header className="app-header">
         <h1>Expense Tracker</h1>
         <p>Track expenses, income, and your balance</p>
+        <DigitalClock />
         <button className="secondary" onClick={logout}>Logout</button>
       </header>
 

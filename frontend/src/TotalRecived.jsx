@@ -52,6 +52,12 @@ export default function TotalRecived({
     setInput("");
   }
 
+  function handleReceivedKeyDown(event) {
+    if (event.key === "Enter") {
+      addAmount();
+    }
+  }
+
   return (
     <div className="income-section">
       <h3 className="section-title">Amount Received</h3>
@@ -62,6 +68,7 @@ export default function TotalRecived({
           placeholder="Enter Amount Received"
           value={input}
           onChange={e => setInput(e.target.value)}
+          onKeyDown={handleReceivedKeyDown}
         />
 
         <button onClick={addAmount}>

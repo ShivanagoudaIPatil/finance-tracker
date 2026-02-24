@@ -60,6 +60,12 @@ export default function Expense({ token, onUnauthorized, expenses, setExpenses }
     setNewAmount("");
   }
 
+  function handleAddExpenseKeyDown(event) {
+    if (event.key === "Enter") {
+      addNewExpense();
+    }
+  }
+
   // delete from backend
   async function deleteExpense(id) {
     const res = await fetch(`http://localhost:5000/expenses/${id}`, {
@@ -106,6 +112,7 @@ export default function Expense({ token, onUnauthorized, expenses, setExpenses }
           placeholder="Expense name"
           value={newTitle}
           onChange={e => setNewTitle(e.target.value)}
+          onKeyDown={handleAddExpenseKeyDown}
         />
 
         <input
@@ -113,6 +120,7 @@ export default function Expense({ token, onUnauthorized, expenses, setExpenses }
           type="number"
           value={newAmount}
           onChange={e => setNewAmount(e.target.value)}
+          onKeyDown={handleAddExpenseKeyDown}
         />
 
         <button onClick={addNewExpense}>Add Expense</button>
