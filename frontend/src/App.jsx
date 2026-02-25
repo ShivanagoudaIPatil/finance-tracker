@@ -122,7 +122,7 @@ function App() {
         <h1>Expense Tracker</h1>
         <p>Track expenses, income, and your balance</p>
         <DigitalClock />
-        <button className="secondary" onClick={logout}>Logout</button>
+        <button className="secondary logout-button" onClick={logout}>Logout</button>
       </header>
 
       <section className="card">
